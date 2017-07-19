@@ -1,6 +1,9 @@
 # BenUpload
 pc、h5上传图片插件，依赖Jquery，或Zepto
-
+目前功能：
+	1.可上传到服务器
+	2.压缩图片
+	3.生成base64
 
 # 用法
 
