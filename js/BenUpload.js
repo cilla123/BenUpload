@@ -255,6 +255,13 @@ var BenUploadUtils = function(options){
     }
 
     /**
+     * 获取文件类型
+     */
+    var getFileType = function(str){
+        return str.split('/')[1]
+    }
+
+    /**
      * 限制与提交
      */
     var limitCallback = function(){
@@ -267,7 +274,7 @@ var BenUploadUtils = function(options){
                     var base64Img= e.target.result;
 
                     // 压缩前的数据
-                    settings.onRenderResizerBefore(base64Img);
+                    settings.onRenderResizerBefore ? settings.onRenderResizerBefore(base64Img) : '';
 
                     //--执行resize。
                     BenImageResizer({
@@ -280,7 +287,7 @@ var BenUploadUtils = function(options){
                         onTmpImgGenerate:function(img){},
                         success:function(resizeImgBase64,canvas){
                             // //压缩后预览
-                            settings.onRenderResizerAfter(resizeImgBase64);
+                            settings.onRenderResizerAfter ? settings.onRenderResizerAfter(resizeImgBase64) : '';
                             uploadToServer(resizeImgBase64);
                         }
                     });
@@ -320,19 +327,29 @@ var BenUploadUtils = function(options){
     var isFormatRange = function(self){
         // 图片格式
         var fileFormat = getFileFormat(self);
-        if (!new RegExp("(jpg|jpeg|png)+","gi").test(fileFormat)) {
-            settings.limitFormatCallback({
+        var fileType = getFileType(fileFormat);
+
+        var fileTypeArr = settings.limitFormat.split(',');
+        var regexTemp = '';
+        for (var index = 0; index < fileTypeArr.length; index++) {
+            regexTemp += fileTypeArr[index] + '|';
+        }
+        regexTemp = regexTemp.substring(0, regexTemp.length - 1);
+        var regexStr = '(' + regexTemp + ')$';
+
+        if (!new RegExp(regexStr).test(fileType)) {
+            settings.limitFormatCallback ? settings.limitFormatCallback({
                 errorCode: 500,
                 data: '',
                 msg: '图片格式不正确，请上传' + settings.limitFormat + '的其中一个格式'
-            });
+            }) : '';
             return false;
         }else{
-            settings.limitFormatCallback({
+            settings.limitFormatCallback ? settings.limitFormatCallback({
                 errorCode: 200,
                 data: '',
                 msg: '在设置的图片格式范围内'
-            });
+            }) : '';
             return true;
         }
     }
@@ -364,14 +381,14 @@ var BenUploadUtils = function(options){
                 dataType: 'JSON',
                 data: data || '',
                 beforeSend: function () {
-                    settings.onUploadBeforeCallback();
+                    settings.onUploadBeforeCallback ? settings.onUploadBeforeCallback() : '';
                 }
             }).done(function (res) {
-                settings.onUploadSuccessCallback(res);
+                settings.onUploadSuccessCallback ? settings.onUploadSuccessCallback(res) : '';
             }).fail(function (err) {
-                settings.onUploadFailCallback(err);
+                settings.onUploadFailCallback ? settings.onUploadFailCallback(err) : '';
             }).always(function () {
-                settings.onUploadAlwaysCallback();
+                settings.onUploadAlwaysCallback ? settings.onUploadAlwaysCallback() : '';
             });
         }else{
             $.ajax({
@@ -380,16 +397,16 @@ var BenUploadUtils = function(options){
     			dataType: 'JSON',
     			data: data || '',
     			beforeSend:function(){
-                    settings.onUploadBeforeCallback();
+                    settings.onUploadBeforeCallback ? settings.onUploadBeforeCallback() : '';
     			},
     			success: function(res){
-                    settings.onUploadSuccessCallback(res);
+                    settings.onUploadSuccessCallback ? settings.onUploadSuccessCallback(res) : '';
     			},
     			error: function(err){
-                    settings.onUploadFailCallback(err);
+                    settings.onUploadFailCallback ? settings.onUploadFailCallback(err) : '';
     			},
     			complete: function(){
-                    settings.onUploadAlwaysCallback();
+                    settings.onUploadAlwaysCallback ? settings.onUploadAlwaysCallback() : '';
     			}
     		});
         }
