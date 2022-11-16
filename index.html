@@ -1,56 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>BenUpload插件</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta charset="UTF-8">
+    <title>BenUpload插件</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 </head>
+
 <body>
 
-	<input type="file" capture="camera" class="uploadfile"/>
+    <input type="file" capture="camera" class="uploadfile" />
     <!--所选文件压缩前预览-->
     <h3>压缩前预览：</h3>
-    <img src="" id="preview" style="width:100%"/>
+    <img src="" id="preview" style="width:100%" />
 
     <!--所选文件压缩后预览-->
     <h3>压缩后预览：</h3>
-    <img src="" id="nextview" style="width:100%"/>
+    <img src="" id="nextview" style="width:100%" />
 
-	
-	<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="dist/BenUpload.min.js"></script>
     <!-- <script type="text/javascript" src="./js/BenUpload.js"></script> -->
-	<script type="text/javascript">
-		BenUploadUtils({
+    <script type="text/javascript">
+        BenUploadUtils({
             dom: ".uploadfile",		// 需要挂在的DOM
             url: "/",				// 上传的服务器地址
+            isCompress: true,
             limitSize: 10240000,    // 1024000kb
             limitFormat: 'gif,jpg,jpeg,png,GIF,JPG,PNG', // 使用什么格式
-            limitSizeCallback: function(err){	// 限制大小的回调事件
+            limitSizeCallback: function (err) {	// 限制大小的回调事件
                 console.log(err);
             },
-            limitFormatCallback: function(err){	// 限制格式的回调事件
+            limitFormatCallback: function (err) {	// 限制格式的回调事件
                 console.log(err);
             },
-            onUploadBeforeCallback: function(res){	// 上传图片之前的回调事件
+            onUploadBeforeCallback: function (res) {	// 上传图片之前的回调事件
                 console.log(res);
             },
-            onUploadSuccessCallback: function(res){	// 上传成功的回调事件
+            onUploadSuccessCallback: function (res) {	// 上传成功的回调事件
                 console.log(res);
             },
-            onUploadFailCallback: function(res){ // 上传失败的回调事件
+            onUploadFailCallback: function (res) { // 上传失败的回调事件
                 console.log(res);
             },
-            onUploadAlwaysCallback: function(res){	// 上传无论什么结果的回调事件
+            onUploadAlwaysCallback: function (res) {	// 上传无论什么结果的回调事件
                 console.log(res);
             },
-            onRenderResizerBefore: function(res){	// 压缩之前的回调事件
-                $("#preview").attr("src",res);
+            onRenderResizerBefore: function (res) {	// 压缩之前的回调事件
+                $("#preview").attr("src", res);
             },
-            onRenderResizerAfter: function(res){	// 压缩之后的回调事件
-                $("#nextview").attr("src",res);
+            onRenderResizerAfter: function (res) {	// 压缩之后的回调事件
+                $("#nextview").attr("src", res);
             }
         }).init();
-	</script>
+    </script>
 </body>
+
 </html>

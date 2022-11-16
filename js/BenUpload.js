@@ -272,25 +272,28 @@ var BenUploadUtils = function(options){
 
                 reader.onload = function(e) {
                     var base64Img= e.target.result;
-
-                    // 压缩前的数据
-                    settings.onRenderResizerBefore ? settings.onRenderResizerBefore(base64Img) : '';
-
-                    //--执行resize。
-                    BenImageResizer({
-                        resizeMode:"auto",
-                        dataSource:base64Img,
-                        dataSourceType:"base64",
-                        maxWidth:1200, //允许的最大宽度
-                        maxHeight:600, //允许的最大高度。
-                        debug:true,
-                        onTmpImgGenerate:function(img){},
-                        success:function(resizeImgBase64,canvas){
-                            // //压缩后预览
-                            settings.onRenderResizerAfter ? settings.onRenderResizerAfter(resizeImgBase64) : '';
-                            uploadToServer(resizeImgBase64);
-                        }
-                    });
+                    if (settings.isCompress) {
+                        // 压缩前的数据
+                        settings.onRenderResizerBefore ? settings.onRenderResizerBefore(base64Img) : '';
+    
+                        //--执行resize。
+                        BenImageResizer({
+                            resizeMode:"auto",
+                            dataSource:base64Img,
+                            dataSourceType:"base64",
+                            maxWidth:1200, //允许的最大宽度
+                            maxHeight:600, //允许的最大高度。
+                            debug:true,
+                            onTmpImgGenerate:function(img){},
+                            success:function(resizeImgBase64,canvas){
+                                // //压缩后预览
+                                settings.onRenderResizerAfter ? settings.onRenderResizerAfter(resizeImgBase64) : '';
+                                uploadToServer(resizeImgBase64);
+                            }
+                        });
+                    } else {
+                        uploadToServer(base64Img);
+                    }
                 }
 
                 reader.readAsDataURL(fileTemp);
