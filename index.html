@@ -26,7 +26,7 @@
         BenUploadUtils({
             dom: ".uploadfile",		// 需要挂在的DOM
             url: "/",				// 上传的服务器地址
-            isCompress: true,
+            isCompress: true,       // 是否进行压缩
             limitSize: 10240000,    // 1024000kb
             limitFormat: 'gif,jpg,jpeg,png,GIF,JPG,PNG', // 使用什么格式
             limitSizeCallback: function (err) {	// 限制大小的回调事件
